@@ -2,9 +2,9 @@
 
 This repository contains a reproduction study of the paper:
 
-> **"PracticalDG: Perturbation Distillation on Vision-Language Models for Hybrid Domain Generalization"**, Zining Chen et al., CVPR, 2024.
+> **"[PracticalDG: Perturbation Distillation on Vision-Language Models for Hybrid Domain Generalization](https://arxiv.org/abs/2404.09011)"**, Zining Chen et al., CVPR, 2024.
 
-If available, we utilize the official implementation provided by the authors and extend it for additional analysis and experiments.
+We utilize the [official implementation](https://github.com/znchen666/HDG) provided by the authors and extend it for additional analysis and experiments.
 
 ---
 
@@ -15,43 +15,80 @@ Pytorch 1.8.0+
 ```
 
 ## Data Preparation
-Download the dataset PACS, OfficeHome.
-
-Arrange data with the following structure:
+Download the dataset [PACS](https://github.com/lingeringlight/DomainDrop?tab=readme-ov-file), [OfficeHome](https://www.hemanthdv.org/officeHomeDataset.html).
+Create a `Dataset` folder and insert the downloaded dataset.
 ```
-./Dataset
+/PACS
 ├── Domain1
       ├── cat
       ├── ......
 ├── Domain2
       ├── cat
       ├── ......
-├── Domain3
+/OfficeHome
+├── Domain1
       ├── cat
       ├── ......
-├── Domain4
+├── Domain2
       ├── cat
       ├── ......
-├── image_list
-      List for each dataset is provided in ./image_list 
+
 ```
 
 ## Scope of reproducibility
 We focus on the following reproduction parts.
 
-- **Claim 1**: (예: Proposed method outperforms baseline methods on DATASET under SCENARIO. → e.g., Table 1)
-- **Claim 2**: (예: Certain component/regularizer significantly improves performance. → e.g., Table 2 / Fig. 3)
-- **Claim 3**: (예: Method is robust to HYPER-PARAMETER or DATASET variations. → e.g., Fig. 4)
-- **Claim 4**: (선택) Additional ablation or robustness study.
+- **Model Performance**: Measure and compare the performance of the proposed method and the CLIP Base method (Table 1,2 / Fig 4)
+- **Effectiveness of Loss component**: Measure and compare the proposed loss component performance (Table 5)
+- **Sensitivity of Hyper-parameter setting**: Check model sensitivity to hyperparameter changes (Fig 5)
+- **Realistic Treshold setting**: Set the threshold on the validation set and measure model performance
+In this study, we used the OfficeHome and PACS datasets (mainly OfficeHome). 
+Except for the "Model Performance" section, all other comparative experiments were conducted on a single test domain.
 
 
+## Run to check Model Performance
 ```
 bash scripts/run.sh
 ```
-Change `test_envs` to different values (e.g., 0,1,2,3) to conduct leave-one-domain-out protocol.
+Run the command above to save the model results. 
+To use a different dataset, change the `dataset` and `data_dir` arguments in the code. 
+The results are saved in the `output` folder. The file path follows this structure: Dataset/H(class space)/domain(test_env)
+Performance metrics include accuracy and AUROC for validation/test data, and H-score for test data. These metrics are saved in done.txt, eval_h_score, and eval_h_score.txt.
 
-## Acknowledgment
-We thank the authors from [OpenDG-Eval](https://github.com/shiralab/OpenDG-Eval) for reference. We modify their code to implement Hybrid Domain Generalization.
+```
+python summarize_result_domain.py --~
+```
+Run the command above to visualize the performance on the target domain. 
+You can compare the performance of `CLIPBase` and the `proposed method` across different H (class spaces) and domains.
+
+
+## Run to check Effectiveness of Loss component
+```
+bash scripts/run.sh~
+```
+Run the command above to check the performance of models using the specific loss terms proposed in the paper. 
+You can compare the performance of CLIPBase, I-PD, SI-PD, and SCI-PD.
+
+
+## Run to check Sensitivity of Hyper-parameter setting
+```
+bash scripts/run.sh~
+```
+Run the command above to check model robustness by adjusting the hyperparameters. 
+This script runs experiments for `alpha`, `beta`, and `tau` within the ranges suggested in the paper and saves the results.
+```
+python .py~
+```
+Run the command above to visualize the H-score for each hyperparameter, similar to Figure 5 in the paper.
+
+
+## Run to for Realistic Treshold setting
+```
+bash scripts/run_val.sh~
+```
+Run the command above to measure performance using a threshold set by the validation set for unknown detection.
+The results are saved in /eval/`eval_h_score.txt`. This file contains the target domain performance for each threshold.
+
 
 ## Citation
 ```
