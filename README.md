@@ -41,8 +41,8 @@ We focus on the following reproduction parts.
 - **Model Performance**: Measure and compare the performance of the proposed method and the CLIP Base method (Table 1,2 / Fig 4)
 - **Effectiveness of Loss component**: Measure and compare the proposed loss component performance (Table 5)
 - **Sensitivity of Hyper-parameter setting**: Check model sensitivity to hyperparameter changes (Fig 5)
-- **Realistic Treshold setting**: Set the threshold on the validation set and measure model performance
-- In this study, we used the OfficeHome and PACS datasets (mainly OfficeHome). Except for the "Model Performance" section, all other comparative experiments were conducted on a single test domain.
+- **Realistic Treshold setting**: Set the threshold on the validation set and measure model performance  
+In this study, we used the OfficeHome and PACS datasets (mainly OfficeHome). Except for the "Model Performance" section, all other comparative experiments were conducted on a single test domain.
 
 
 ## Run to check Model Performance
