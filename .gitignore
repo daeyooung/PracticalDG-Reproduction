@@ -1,2 +1,14 @@
+# 데이터셋과 실험 산출물은 올리지 않는다 (results/ 의 정리된 CSV·그림만 커밋)
+Dataset
 Dataset/
 output/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 체크포인트 / 피클
+*.pkl
+*.pth

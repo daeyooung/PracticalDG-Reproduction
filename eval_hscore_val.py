@@ -188,7 +188,8 @@ def get_args():
     args = parser.parse_args()
 
     args.data_dir = args.data_file + args.data_dir
-    os.environ["CUDA_VISIBLE_DEVICS"] = args.gpu_id
+    # GPU 는 --gpu_id 로 지정한 cuda:{gpu_id} 장치를 코드 안에서 직접 사용한다.
+    # (원본의 os.environ["CUDA_VISIBLE_DEVICS"] 는 오타라서 효과가 없던 줄을 제거함)
     if args.dataset != 'MultiDataSet':
         os.makedirs(args.output + "/eval", exist_ok=True)
         # sys.stdout = Tee(os.path.join(args.output + "/eval", "out.txt"))

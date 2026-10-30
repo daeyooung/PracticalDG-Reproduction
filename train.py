@@ -178,7 +178,8 @@ def get_args():
     args = parser.parse_args()
 
     args.data_dir = args.data_file + args.data_dir
-    os.environ["CUDA_VISIBLE_DEVICS"] = args.gpu_id
+    # GPU 는 --gpu_id 로 지정한 cuda:{gpu_id} 장치를 코드 안에서 직접 사용한다.
+    # (원본의 os.environ["CUDA_VISIBLE_DEVICS"] 는 오타라서 효과가 없던 줄을 제거함)
     os.makedirs(args.output, exist_ok=True)
     sys.stdout = Tee(os.path.join(args.output, "out.txt"))
     sys.stderr = Tee(os.path.join(args.output, "err.txt"))
@@ -385,11 +386,11 @@ if __name__ == "__main__":
         with open(os.path.join(args.output, "done.txt"), "w") as f:
             f.write("done\n")
             f.write(f"max_epoch: {args.max_epoch}\n")
-            f.write(f"epoch: {epoch - args.early_stopping}\n")
+            f.write(f"epoch: {epoch + 1}\n")
             f.write("total cost time:%s\n" % (str(time.time() - sss)))
             f.write(
                 "cost time per epoch:%s\n"
-                % str((time.time() - sss) / (epoch - args.early_stopping + 1))
+                % str((time.time() - sss) / (epoch + 1))
             )
             f.write("valid acc:%.4f\n" % (best_valid_acc))
             f.write("target acc1:%.4f\n" % (target_acc1))
@@ -404,11 +405,11 @@ if __name__ == "__main__":
         with open(os.path.join(args.output, "done.txt"), "w") as f:
             f.write("done\n")
             f.write(f"max_epoch: {args.max_epoch}\n")
-            f.write(f"epoch: {epoch - args.early_stopping}\n")
+            f.write(f"epoch: {epoch + 1}\n")
             f.write("total cost time:%s\n" % (str(time.time() - sss)))
             f.write(
                 "cost time per epoch:%s\n"
-                % str((time.time() - sss) / (epoch - args.early_stopping + 1))
+                % str((time.time() - sss) / (epoch + 1))
             )
             f.write("valid acc:%.4f\n" % (best_valid_acc))
             f.write("target acc:%.4f\n" % (target_acc))

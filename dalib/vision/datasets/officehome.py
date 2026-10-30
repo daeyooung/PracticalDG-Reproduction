@@ -1,9 +1,13 @@
-import os
 from .imagelist import ImageList
-from ._util import download as download_data, check_exits
+from .pacs import resolve_path, domain_label_from_path
 
 
 class OfficeHome(ImageList):
+    """OfficeHome 데이터셋 (65 classes, 4 domains).
+
+    라벨 0~53은 known, 54~64는 target 도메인에만 존재하는 unknown 클래스로 사용한다.
+    경로는 저장소 루트 기준으로 해석한다 (pacs.resolve_path 참고).
+    """
 
     CLASSES = ['Drill', 'Exit_Sign', 'Bottle', 'Glasses', 'Computer', 'File_Cabinet', 'Shelf', 'Toys', 'Sink',
                'Laptop', 'Kettle', 'Folder', 'Keyboard', 'Flipflops', 'Pencil', 'Bed', 'Hammer', 'ToothBrush', 'Couch',
@@ -12,6 +16,7 @@ class OfficeHome(ImageList):
                'Fan', 'Ruler', 'Pan', 'Screwdriver', 'Trash_Can', 'Printer', 'Speaker', 'Eraser', 'Bucket', 'Chair',
                'Calendar', 'Calculator', 'Flowers', 'Lamp_Shade', 'Spoon', 'Candles', 'Clipboards', 'Scissors', 'TV',
                'Curtains', 'Fork', 'Soda', 'Table', 'Knives', 'Oven', 'Refrigerator', 'Marker']
+    DOMAINS = ["Art", "Clipart", "Product", "Real_World"]
 
     def __init__(self, root, task, filter_class, split='all', **kwargs):
         if split == 'all':
@@ -35,26 +40,25 @@ class OfficeHome(ImageList):
                 "P": "image_list/OfficeHome/Product_val.txt",
                 "R": "image_list/OfficeHome/Real_World_val.txt",
             }
+        else:
+            raise ValueError(f"unknown split: {split}")
 
         assert task in self.image_list
-        data_list_file = os.path.join('/home/user/Desktop/dae/HDG-main', self.image_list[task])
+        data_list_file = resolve_path(self.image_list[task])
 
         super(OfficeHome, self).__init__(root, num_classes=len(filter_class), data_list_file=data_list_file,
-                                       filter_class=filter_class, **kwargs)
-
-        self.domain = ["Art", "Clipart", "Product", "Real_World"]
+                                         filter_class=filter_class, **kwargs)
+        self.domain = self.DOMAINS
 
     def __getitem__(self, index):
         """
         Parameters:
             - **index** (int): Index
-            - **return** (tuple): (image, target) where target is index of the target class.
+            - **return** (tuple): (image, target, domain_label)
         """
         path, target = self.data_list[index]
-        path = path.replace('OfficeHom', 'OfficeHome')
-        domain_name = path.split('/')[3]
-        domain_label = self.domain.index(domain_name)
-        img = self.loader(os.path.join('/home/user/Desktop/dae/HDG-main',path[1:]))
+        domain_label = domain_label_from_path(path, self.domain)
+        img = self.loader(resolve_path(path))
         if self.transform is not None:
             img = self.transform(img)
         if self.target_transform is not None and target is not None:

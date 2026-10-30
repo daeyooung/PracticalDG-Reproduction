@@ -1,0 +1,14 @@
+# 검증 환경: Python 3.10.19 / torch 2.9.1+cu128 / torchvision 0.24.1+cu128 / numpy 1.26.4 / matplotlib 3.10.8
+# PyTorch 는 CUDA 버전에 맞는 휠을 https://pytorch.org 안내대로 먼저 설치하는 것을 권장한다.
+torch>=2.0
+torchvision>=0.15
+numpy>=1.24
+scikit-learn
+matplotlib
+Pillow
+timm
+ftfy
+regex
+tqdm
+# OpenAI CLIP (ViT-B/16 teacher). 첫 실행 시 가중치(~350MB)를 자동 다운로드한다.
+git+https://github.com/openai/CLIP.git
