@@ -33,7 +33,7 @@ ResNet-18, 30 epoch × 100 step, seed 0, GPU 1장. 공식 설정보다 짧게 �
 | `scripts/run_pacs.sh`, `run_pacs_all.sh`, `smoke_test.sh` | PACS 실험 1회 / 전체 8회 + 결과 그래프 / 1 epoch 동작 확인 |
 | `check_setup.py` | 패키지·GPU·데이터셋·이미지 리스트 점검 |
 | `utils/class_names.py` | 알고리즘 코드에 하드코딩돼 있던 클래스 이름 분리, PACS 지원, CLIP 프롬프트 토큰화 |
-| `dalib/vision/datasets/pacs.py`, `officehome.py` | 저자 PC 절대 경로 제거, 저장소 기준 상대 경로로 통일 |
+| `dalib/vision/datasets/pacs.py`, `officehome.py` | 특정 PC 폴더 구조에서만 동작하던 데이터 경로 처리를 어디서 받아도 동작하도록 수정 |
 | `alg/algs/CLIPBase.py`, `SCIPD.py` | 공통 모듈을 쓰도록 리팩터링 (손실 계산은 원본과 동일) |
 | `visualize/compare_clipbase_scipd.py` | 결과 파일 파싱 → H 별 acc / H-score 비교 CSV·그래프 (논문 Fig. 4) |
 | `visualize/visualize_hyper.py`, `summarize_loss.py`, `threshold_val_*.py`, `compute_h2_cv.py` | 하이퍼파라미터 민감도(Fig. 5), 손실 ablation(Table 5), 검증 셋 기반 threshold 평가 집계·시각화 |
